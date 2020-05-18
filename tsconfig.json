@@ -4,10 +4,17 @@
     "removeComments": true,
     "moduleResolution": "node",
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "sourceMap": true,
     "target": "es2017",
-    "outDir": "lib"
+    "outDir": "lib",
+    "preserveConstEnums": true,
+    "strictNullChecks": true,
+    "inlineSources": true,
+    "inlineSourceMap": true,
+    "sourceRoot": "/",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "rootDir": "./src",
+    "resolveJsonModule": true
   },
   "include": ["./**/*.ts"],
   "exclude": [

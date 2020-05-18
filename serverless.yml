@@ -5,6 +5,10 @@ custom:
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules: true
+  prune:
+    automatic: true
+    includeLayers: true
+    number: 3
 
 plugins:
   - serverless-webpack
