@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildResponse(statusCode: number, data: any) {
     return {
         headers: {
@@ -16,7 +17,4 @@ function processHeaders(headers: { [key: string]: string }) {
     }, {});
 }
 
-export {
-    buildResponse,
-    processHeaders,
-};
+export { buildResponse, processHeaders };

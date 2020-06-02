@@ -1,27 +1,90 @@
 service:
-  name: serverless-signed-urls
+    name: node-serverless-products
 
 custom:
-  webpack:
-    webpackConfig: ./webpack.config.js
-    includeModules: true
-  prune:
-    automatic: true
-    includeLayers: true
-    number: 3
+    webpack:
+        webpackConfig: ./webpack.config.js
+        packager: yarn
+        includeModules: true
+    prune:
+        automatic: true
+        includeLayers: true
+        number: 1
 
 plugins:
-  - serverless-webpack
-  - serverless-prune-plugin
+    - serverless-webpack
+    - serverless-prune-plugin
 
 provider:
-  name: aws
-  runtime: nodejs12.x
+    name: aws
+    runtime: nodejs12.x
+    stage: ${opt:stage, 'dev'}
+    region: ${opt:region, 'eu-west-1'}
+    apiKeys:
+        - ${self:service.name}-${self:provider.stage}
+    timeout: 29
+    # deploymentBucket:
+    #     name: ${file(./config.json:deploymentBucket)}
+    tracing:
+        lambda: true
+    environment:
+        AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
 
 functions:
-  hello:
-    handler: handler.handler
-    events:
-      - http:
-          method: get
-          path: hello
+    listAllProducts:
+        handler: src/handlers/getAllProducts.handler
+        events:
+            - http:
+                  path: /products
+                  method: get
+                  cors: true
+                  private: true
+
+    queryProduct:
+        handler: src/handlers/queryProduct.handler
+        events:
+            - http:
+                  path: /products/{id}
+                  method: post
+                  cors: true
+                  private: true
+
+    getProductById:
+        handler: src/handlers/getProduct.handler
+        events:
+            - http:
+                  path: /products/{id}
+                  method: get
+                  cors: true
+                  private: true
+
+    createProduct:
+        handler: src/handlers/createProduct.handler
+        events:
+            - http:
+                  path: /products
+                  method: post
+                  cors: true
+                  private: true
+
+    updateProduct:
+        handler: src/handlers/updateProduct.handler
+        events:
+            - http:
+                  path: /products/{id}
+                  method: put
+                  cors: true
+                  private: true
+
+    deleteProduct:
+        handler: src/handlers/deleteProduct.handler
+        events:
+            - http:
+                  path: /products/{id}
+                  method: delete
+                  cors: true
+                  private: true
+
+resources:
+    - ${file(templates/product-table.yml)}
+    - ${file(templates/s3-bucket.yml)}

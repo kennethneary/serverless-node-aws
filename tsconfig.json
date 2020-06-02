@@ -1,27 +1,31 @@
 {
-  "compilerOptions": {
-    "lib": ["es2017"],
-    "removeComments": true,
-    "moduleResolution": "node",
-    "noUnusedLocals": true,
-    "target": "es2017",
-    "outDir": "lib",
-    "preserveConstEnums": true,
-    "strictNullChecks": true,
-    "inlineSources": true,
-    "inlineSourceMap": true,
-    "sourceRoot": "/",
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "rootDir": "./src",
-    "resolveJsonModule": true
-  },
-  "include": ["./**/*.ts"],
-  "exclude": [
-    "node_modules/**/*",
-    ".serverless/**/*",
-    ".webpack/**/*",
-    "_warmup/**/*",
-    ".vscode/**/*"
-  ]
+    "compilerOptions": {
+        "lib": [
+            "es2017"
+        ],
+        "removeComments": true,
+        "moduleResolution": "node",
+        "target": "es2017",
+        "outDir": "lib",
+        "preserveConstEnums": true,
+        // "strictNullChecks": true,
+        "inlineSources": true,
+        "inlineSourceMap": true,
+        "sourceRoot": "/",
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "rootDir": "./src",
+        "resolveJsonModule": true
+    },
+    "include": [
+        "./**/*.ts"
+    ],
+    "exclude": [
+        "node_modules/**/*",
+        "webpack.config.js",
+        ".serverless/**/*",
+        ".webpack/**/*",
+        "_warmup/**/*",
+        ".vscode/**/*"
+    ]
 }
