@@ -36,8 +36,8 @@ export default class ProductService {
         try {
             const dbRequest: DocumentClient.GetItemInput = {
                 TableName: ProductService.PRODUCT_TABLE,
-        Key: {
-                    id
+                Key: {
+                    id,
                 },
             };
             const productPromise = this.dynamoService.getItem(dbRequest);
