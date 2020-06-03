@@ -22,7 +22,6 @@
     ],
     "exclude": [
         "node_modules/**/*",
-        "webpack.config.js",
         ".serverless/**/*",
         ".webpack/**/*",
         "_warmup/**/*",

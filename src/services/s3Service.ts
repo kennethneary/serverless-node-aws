@@ -7,12 +7,8 @@ import {
     GetObjectOutput,
     PutObjectOutput,
     DeleteObjectOutput,
-    ObjectKey,
-    Body,
 } from 'aws-sdk/clients/s3';
 import { PromiseResult } from 'aws-sdk/lib/request';
-import { BucketName } from 'aws-sdk/clients/elastictranscoder';
-import { ContentType } from 'aws-sdk/clients/cloudsearchdomain';
 
 export default class S3Service {
     private s3: S3;

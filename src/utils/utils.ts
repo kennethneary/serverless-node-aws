@@ -1,5 +1,8 @@
+import { APIGatewayProxyResult } from 'aws-lambda';
+import { CONDITIONAL_CHECK_FAILED_EXCEPTION } from '../constants';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildResponse(statusCode: number, data: any) {
+function buildResponse(statusCode: number, data?: any): APIGatewayProxyResult {
     return {
         headers: {
             'Content-Type': 'application/json',
@@ -17,4 +20,8 @@ function processHeaders(headers: { [key: string]: string }) {
     }, {});
 }
 
-export { buildResponse, processHeaders };
+function isConditionalException(error) {
+    return error.code === CONDITIONAL_CHECK_FAILED_EXCEPTION;
+}
+
+export { buildResponse, processHeaders, isConditionalException };

@@ -3,6 +3,7 @@ import * as log from 'lambda-log';
 import { buildResponse } from '../utils/utils';
 import ProductService from '../services/productService';
 
+// Create clients outside of the handler so container resources reuse is possible
 const productService = new ProductService();
 
 export const handler: APIGatewayProxyHandler = async (

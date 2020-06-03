@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const slsw = require('serverless-webpack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
-const isLocal = slsw.lib.webpack.isLocal;
+const { isLocal } = slsw.lib.webpack;
 
 module.exports = {
     mode: isLocal ? 'development' : 'production',
@@ -12,12 +11,12 @@ module.exports = {
     externals: [nodeExternals()],
     devtool: 'source-map',
     resolve: {
-        extensions: ['.js', '.jsx', '.json', '.ts', '.tsx']
+        extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
     },
     output: {
         libraryTarget: 'commonjs2',
         path: path.join(__dirname, '.webpack'),
-        filename: '[name].js'
+        filename: '[name].js',
     },
     target: 'node',
     module: {
@@ -30,14 +29,14 @@ module.exports = {
                     {
                         loader: 'cache-loader',
                         options: {
-                            cacheDirectory: path.resolve('.webpackCache')
-                        }
+                            cacheDirectory: path.resolve('.webpackCache'),
+                        },
                     },
                     'babel-loader',
-                    'eslint-loader'
-                ]
-            }
-        ]
+                    'eslint-loader',
+                ],
+            },
+        ],
     },
-    plugins: [new ForkTsCheckerWebpackPlugin()]
+    plugins: [new ForkTsCheckerWebpackPlugin()],
 };

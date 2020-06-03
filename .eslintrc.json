@@ -49,5 +49,16 @@
                 "tsx": "never"
             }
         ]
-    }
+    },
+    "overrides": [
+        {
+            // require() statements allowed in .js files
+            "files": [
+                "*.js"
+            ],
+            "rules": {
+                "@typescript-eslint/no-var-requires": "off"
+            }
+        }
+    ]
 }
