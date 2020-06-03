@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import * as log from 'lambda-log';
 import { v4 as uuidv4 } from 'uuid';
-import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import { DocumentClient, ArchivalSummary } from 'aws-sdk/clients/dynamodb';
 import {
     GetObjectRequest,
     PutObjectRequest,
@@ -36,8 +36,8 @@ export default class ProductService {
         try {
             const dbRequest: DocumentClient.GetItemInput = {
                 TableName: ProductService.PRODUCT_TABLE,
-                Key: {
-                    id,
+            Key: {
+                    id
                 },
             };
             const productPromise = this.dynamoService.getItem(dbRequest);
