@@ -46,7 +46,7 @@ export default class ProductService {
 
             const s3Request: GetObjectRequest = {
                 Bucket: ProductService.S3_BUCKET_NAME,
-                Key: id,
+    Key: id
             };
             const s3Promise = this.s3Service.getObject(s3Request);
 
