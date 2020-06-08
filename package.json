@@ -4,7 +4,8 @@
     "description": "serverless node aws app",
     "private": true,
     "scripts": {
-        "lint": "eslint src/**/*.ts"
+        "lint": "eslint",
+        "lint:fix": "yarn lint --fix"
     },
     "repository": {
         "type": "git",
