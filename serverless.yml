@@ -4,6 +4,8 @@ service:
 frameworkVersion: '>=1.0.0 <2.0.0'
 
 custom:
+    productsTableName: '${self:service.name}-${self:provider.stage}-table'
+    productsBucketName: '${self:service.name}-${self:provider.stage}-bucket'
     webpack:
         webpackConfig: ./webpack.config.js
         packager: yarn
@@ -22,6 +24,8 @@ provider:
     runtime: nodejs12.x
     stage: ${opt:stage, 'dev'}
     region: ${opt:region, 'eu-west-1'}
+    apiGateway:
+        minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
     apiKeys:
         - ${self:service.name}-${self:provider.stage}
     timeout: 29
@@ -31,6 +35,10 @@ provider:
         lambda: true
     environment:
         AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+        PRODUCTS_TABLE_NAME: ${self:custom.productsTableName}
+        PRODUCTS_TABLE_PRIMARY_ID: id
+        PRODUCTS_TABLE_SECONDARY_INDEX: nameIndex
+        PRODUCTS_BUCKET_NAME: ${self:custom.productsBucketName}
 
 functions:
     listAllProducts:

@@ -4,7 +4,7 @@
     "description": "serverless node aws app",
     "private": true,
     "scripts": {
-        "lint": "eslint src/"
+        "lint": "eslint src/**/*.ts"
     },
     "repository": {
         "type": "git",
@@ -45,16 +45,5 @@
         "typescript": "^3.5.3",
         "webpack": "^4.38.0",
         "webpack-node-externals": "^1.7.2"
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "lint-staged"
-        }
-    },
-    "lint-staged": {
-        "*.{js,ts,json}": [
-            "prettier --write",
-            "eslint --fix"
-        ]
     }
 }

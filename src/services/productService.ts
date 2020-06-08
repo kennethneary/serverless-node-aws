@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import * as log from 'lambda-log';
 import { v4 as uuidv4 } from 'uuid';
-import { DocumentClient, ArchivalSummary } from 'aws-sdk/clients/dynamodb';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import {
     GetObjectRequest,
     PutObjectRequest,
@@ -17,15 +17,17 @@ export default class ProductService {
 
     private s3Service: S3Service;
 
-    private static readonly PRODUCT_TABLE: string = process.env.PRODUCT_TABLE;
+    private static readonly PRODUCT_TABLE: string =
+        process.env.PRODUCTS_TABLE_NAME;
 
     private static readonly PRODUCT_TABLE_PRIMARY_KEY: string =
-        process.env.PRODUCT_TABLE_PRIMARY_KEY;
+        process.env.PRODUCTS_TABLE_PRIMARY_ID;
 
     private static readonly PRODUCT_INDEX_NAME: string =
-        process.env.PRODUCT_INDEX_NAME;
+        process.env.PRODUCTS_TABLE_SECONDARY_INDEX;
 
-    private static readonly S3_BUCKET_NAME: string = process.env.S3_BUCKET_NAME;
+    private static readonly S3_BUCKET_NAME: string =
+        process.env.PRODUCTS_BUCKET_NAME;
 
     constructor() {
         this.dynamoService = new DynamoService();
@@ -36,8 +38,8 @@ export default class ProductService {
         try {
             const dbRequest: DocumentClient.GetItemInput = {
                 TableName: ProductService.PRODUCT_TABLE,
-            Key: {
-                    id
+                Key: {
+                    id,
                 },
             };
             const productPromise = this.dynamoService.getItem(dbRequest);

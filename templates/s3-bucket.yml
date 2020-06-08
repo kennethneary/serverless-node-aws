@@ -2,4 +2,4 @@ Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: ${self:custom.bucketName}
+      BucketName: ${self:custom.productsBucketName}

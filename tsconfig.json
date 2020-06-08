@@ -8,7 +8,6 @@
         "target": "es2017",
         "outDir": "lib",
         "preserveConstEnums": true,
-        // "strictNullChecks": true,
         "inlineSources": true,
         "inlineSourceMap": true,
         "sourceRoot": "/",
@@ -24,6 +23,7 @@
         "node_modules/**/*",
         ".serverless/**/*",
         ".webpack/**/*",
+        ".webpackCache/**/*",
         "_warmup/**/*",
         ".vscode/**/*"
     ]
