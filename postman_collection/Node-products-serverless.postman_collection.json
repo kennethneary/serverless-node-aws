@@ -1,0 +1,234 @@
+{
+	"info": {
+		"_postman_id": "a75d63e2-d955-4181-a319-8e6eca912a51",
+		"name": "Node-products-serverless",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create product",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{x-api-key}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"id\",\n    \"name\": \"john3\",\n    \"price\": \"price\",\n    \"description\": \"description\",\n    \"createdDateTime\": \"createdDateTime\",\n    \"lastUpdatedDateTime\": \"lastUpdatedDateTime\",\n    \"content\": {\n        \"base64Content\": \"base64Content\",\n        \"contentType\": \"contentType\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{products_url}}/{{stage}}/products",
+					"host": [
+						"{{products_url}}"
+					],
+					"path": [
+						"{{stage}}",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all products",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{x-api-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{products_url}}/{{stage}}/products",
+					"host": [
+						"{{products_url}}"
+					],
+					"path": [
+						"{{stage}}",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get product by Id",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{x-api-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{products_url}}/{{stage}}/products/:id",
+					"host": [
+						"{{products_url}}"
+					],
+					"path": [
+						"{{stage}}",
+						"products",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update product",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{x-api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"id\",\n    \"name\": \"john ooooo\",\n    \"price\": \"price\",\n    \"description\": \"description\",\n    \"createdDateTime\": \"createdDateTime\",\n    \"lastUpdatedDateTime\": \"lastUpdatedDateTime\",\n    \"content\": {\n        \"base64Content\": \"base64Content jjj\",\n        \"contentType\": \"contentType\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{products_url}}/{{stage}}/products/:id",
+					"host": [
+						"{{products_url}}"
+					],
+					"path": [
+						"{{stage}}",
+						"products",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete product by Id",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{x-api-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{products_url}}/{{stage}}/products/:id",
+					"host": [
+						"{{products_url}}"
+					],
+					"path": [
+						"{{stage}}",
+						"products",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Name",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{x-api-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{products_url}}/{{stage}}/products/query?name=",
+					"host": [
+						"{{products_url}}"
+					],
+					"path": [
+						"{{stage}}",
+						"products",
+						"query"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "c4bcad83-8368-43a2-8927-8db2af762c62",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "756871cf-e8a8-4ac1-bf60-00171027aff3",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
