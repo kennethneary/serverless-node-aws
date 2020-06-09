@@ -1,11 +1,11 @@
 service:
     name: node-serverless-products
 
-frameworkVersion: '>=1.0.0 <2.0.0'
+frameworkVersion: ">=1.0.0 <2.0.0"
 
 custom:
-    productsTableName: '${self:service.name}-${self:provider.stage}-table'
-    productsBucketName: '${self:service.name}-${self:provider.stage}-bucket'
+    productsTableName: "${self:service.name}-${self:provider.stage}-table"
+    productsBucketName: "${self:service.name}-${self:provider.stage}-bucket"
     webpack:
         webpackConfig: ./webpack.config.js
         packager: yarn
@@ -18,6 +18,7 @@ custom:
 plugins:
     - serverless-webpack
     - serverless-prune-plugin
+    - serverless-cloudformation-sub-variables
 
 provider:
     name: aws
@@ -33,6 +34,40 @@ provider:
     #     name: ${file(./config.json:deploymentBucket)}
     tracing:
         lambda: true
+    iamRoleStatements:
+        - Effect: Allow
+          Action:
+              - dynamodb:Query
+              - dynamodb:Scan
+              - dynamodb:GetItem
+              - dynamodb:PutItem
+              - dynamodb:UpdateItem
+              - dynamodb:DeleteItem
+          Resource:
+              - Fn::GetAtt: ["ProductsDynamoDBTable", "Arn"]
+        - Effect: Allow
+          Action:
+              - dynamodb:Query
+          Resource:
+              - Fn::Sub:
+                    - "#{TABLE_ARN}/index/*"
+                    - TABLE_ARN:
+                        Fn::GetAtt: ["ProductsDynamoDBTable", "Arn"]
+        - Effect: Allow
+          Action:
+              - s3:ListBucket
+          Resource:
+              - Fn::GetAtt: ["ProductsS3Bucket", "Arn"]
+        - Effect: Allow
+          Action:
+              - s3:PutObject
+              - s3:GetObject
+              - s3:DeleteObject
+          Resource:
+              - Fn::Sub:
+                - "#{BUCKET}/*"
+                - BUCKET:
+                    Fn::GetAtt: ["ProductsS3Bucket", "Arn"]
     environment:
         AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
         PRODUCTS_TABLE_NAME: ${self:custom.productsTableName}

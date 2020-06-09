@@ -1,13 +1,16 @@
 all: package
 
 package:
-    serverless package
+	serverless package
 
 deploy:
 	serverless deploy
 
 remove:
-    serverless remove
+	serverless remove
 
 install:
-    yarn install
+	yarn install
+
+lint:
+	yarn lint:src:fix
