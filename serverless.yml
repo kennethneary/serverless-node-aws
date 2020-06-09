@@ -19,6 +19,7 @@ plugins:
     - serverless-webpack
     - serverless-prune-plugin
     - serverless-cloudformation-sub-variables
+    - serverless-offline
 
 provider:
     name: aws

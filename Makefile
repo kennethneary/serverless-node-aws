@@ -14,3 +14,6 @@ install:
 
 lint:
 	yarn lint:src:fix
+
+offline:
+	serverless offline

@@ -6,10 +6,11 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { isLocal } = slsw.lib.webpack;
 
 module.exports = {
+    context: __dirname,
     mode: isLocal ? 'development' : 'production',
     entry: slsw.lib.entries,
+    devtool: isLocal ? 'cheap-module-eval-source-map' : 'source-map',
     externals: [nodeExternals()],
-    devtool: 'source-map',
     resolve: {
         extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
     },
@@ -24,7 +25,11 @@ module.exports = {
             {
                 // Include ts, tsx, js, and jsx files.
                 test: /\.(ts|js)x?$/,
-                exclude: /node_modules/,
+                exclude: [
+                    path.resolve(__dirname, 'node_modules'),
+                    path.resolve(__dirname, '.serverless'),
+                    path.resolve(__dirname, '.webpack'),
+                ],
                 use: [
                     {
                         loader: 'cache-loader',
@@ -35,15 +40,14 @@ module.exports = {
                     'babel-loader',
                 ],
             },
-            {
-                test: /\.(ts|js|json)?$/,
-                exclude: /node_modules/,
-                loader: 'eslint-loader',
-                options: {
-                    cache: true,
-                },
-            },
         ],
     },
-    plugins: [new ForkTsCheckerWebpackPlugin()],
+    plugins: [
+        new ForkTsCheckerWebpackPlugin({
+            eslint: true,
+            eslintOptions: {
+                cache: true,
+            },
+        }),
+    ],
 };
