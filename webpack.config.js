@@ -33,8 +33,15 @@ module.exports = {
                         },
                     },
                     'babel-loader',
-                    'eslint-loader',
                 ],
+            },
+            {
+                test: /\.(ts|js|json)?$/,
+                exclude: /node_modules/,
+                loader: 'eslint-loader',
+                options: {
+                    cache: true,
+                },
             },
         ],
     },
