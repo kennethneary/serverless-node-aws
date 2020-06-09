@@ -9,13 +9,13 @@ const productService = new ProductService();
 export const handler: APIGatewayProxyHandler = async (
     event: APIGatewayProxyEvent
 ) => {
-    log.info('Calling deleteProduct...', event);
+    log.info('Calling deleteProduct...', { event });
     const { id } = event.pathParameters;
     try {
         await productService.deleteProduct(id);
         return buildResponse(200);
     } catch (error) {
-        log.error(`Error deleteProduct...[${error.message}]`, error);
+        log.error(`Error deleteProduct...[${error.message}]`, { error });
         const errorCode = isConditionalException(error) ? 404 : 500;
         return buildResponse(errorCode);
     }

@@ -9,17 +9,17 @@ const productService = new ProductService();
 export const handler: APIGatewayProxyHandler = async (
     event: APIGatewayProxyEvent
 ) => {
-    log.info('Calling getProduct...', event);
+    log.info('Calling getProduct...', { event });
     const { id } = event.pathParameters;
     try {
         const product = await productService.getProduct(id);
-        log.info('Calling getProduct... product: ', product);
+        log.info('Calling getProduct... product: ', { product });
         if (product === null) {
             throw product;
         }
         return buildResponse(200, product);
     } catch (error) {
-        log.error(`Error getProduct...[${error.message}]`, error);
+        log.error(`Error getProduct...[${error.message}]`, { error });
         const errorCode = isConditionalException(error) ? 404 : 500;
         return buildResponse(errorCode);
     }

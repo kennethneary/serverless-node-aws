@@ -16,7 +16,7 @@ export default class DynamoService {
         try {
             return await this.db.get(params).promise();
         } catch (error) {
-            log.error('getItem failed due to', error);
+            log.error('getItem failed due to', { error });
             throw error;
         }
     }
@@ -27,7 +27,7 @@ export default class DynamoService {
         try {
             return await this.db.put(params).promise();
         } catch (error) {
-            log.error('addItem failed due to', error);
+            log.error('addItem failed due to', { error });
             throw error;
         }
     }
@@ -38,7 +38,7 @@ export default class DynamoService {
         try {
             return await this.db.update(params).promise();
         } catch (error) {
-            log.error('updateItem failed due to', error);
+            log.error('updateItem failed due to', { error });
             throw error;
         }
     }
@@ -49,7 +49,7 @@ export default class DynamoService {
         try {
             return await this.db.delete(params).promise();
         } catch (error) {
-            log.error('deleteItem failed due to', error);
+            log.error('deleteItem failed due to', { error });
             throw error;
         }
     }
@@ -60,7 +60,7 @@ export default class DynamoService {
         try {
             return await this.db.query(params).promise();
         } catch (error) {
-            log.error('query failed due to', error);
+            log.error('query failed due to', { error });
             throw error;
         }
     }
@@ -71,7 +71,7 @@ export default class DynamoService {
         try {
             return await this.db.scan(params).promise();
         } catch (error) {
-            log.error('scan failed due to', error);
+            log.error('scan failed due to', { error });
             throw error;
         }
     }

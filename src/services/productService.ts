@@ -56,12 +56,12 @@ export default class ProductService {
             return {
                 ...(<Product>product.Item),
                 content: {
-                    base64Content: s3data.Body,
+                    base64Content: s3data.Body.toString('utf-8'),
                     contentType: s3data.ContentType,
                 },
             };
         } catch (error) {
-            log.error('getProduct failed due to', error);
+            log.error('getProduct failed due to', { error });
             throw error;
         }
     }
@@ -72,14 +72,13 @@ export default class ProductService {
             const dbRequest: DocumentClient.PutItemInput = {
                 TableName: ProductService.PRODUCT_TABLE,
                 Item: {
-                    ...product,
+                    ..._.omit(product, 'content'),
                     id,
                 },
                 ConditionExpression: 'attribute_not_exists(#primaryKey)',
                 ExpressionAttributeNames: {
                     '#primaryKey': ProductService.PRODUCT_TABLE_PRIMARY_KEY,
                 },
-                // ExpressionAttributeValues: '',
             };
             const addItem = this.dynamoService.addItem(dbRequest);
 
@@ -100,7 +99,7 @@ export default class ProductService {
 
             return id;
         } catch (error) {
-            log.error('addProduct failed due to', error);
+            log.error('addProduct failed due to', { error });
             throw error;
         }
     }
@@ -110,7 +109,7 @@ export default class ProductService {
             const dbRequest: DocumentClient.UpdateItemInput = {
                 TableName: ProductService.PRODUCT_TABLE,
                 Key: {
-                    ...product,
+                    ..._.omit(product, 'content'),
                     id,
                 },
                 ConditionExpression: 'attribute_exists(#primaryKey)',
@@ -143,7 +142,7 @@ export default class ProductService {
             await updateObject;
             return Promise.resolve();
         } catch (error) {
-            log.error('updateProduct failed due to', error);
+            log.error('updateProduct failed due to', { error });
             throw error;
         }
     }
@@ -173,7 +172,7 @@ export default class ProductService {
             await deleteObject;
             return Promise.resolve();
         } catch (error) {
-            log.error('deleteProduct failed due to', error);
+            log.error('deleteProduct failed due to', { error });
             throw error;
         }
     }
@@ -194,7 +193,7 @@ export default class ProductService {
             const { Items } = await this.dynamoService.query(dbRequest);
             return <Product[]>Items;
         } catch (error) {
-            log.error('queryProductsByName failed due to', error);
+            log.error('queryProductsByName failed due to', { error });
             throw error;
         }
     }
@@ -207,7 +206,7 @@ export default class ProductService {
             const { Items } = await this.dynamoService.scan(dbRequest);
             return <Product[]>Items;
         } catch (error) {
-            log.error('getAllProducts failed due to', error);
+            log.error('getAllProducts failed due to', { error });
             throw error;
         }
     }

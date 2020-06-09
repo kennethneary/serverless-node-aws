@@ -28,7 +28,7 @@ export default class S3Service {
         try {
             return await this.s3.getObject(params).promise();
         } catch (error) {
-            log.error('getObject failed due to', error);
+            log.error('getObject failed due to', { error });
             throw error;
         }
     }
@@ -47,7 +47,7 @@ export default class S3Service {
         try {
             return await this.s3.putObject(params).promise();
         } catch (error) {
-            log.error('uploadObject failed due to', error);
+            log.error('uploadObject failed due to', { error });
             throw error;
         }
     }
@@ -63,7 +63,7 @@ export default class S3Service {
         try {
             return await this.s3.deleteObject(params).promise();
         } catch (error) {
-            log.error('deleteObject failed due to', error);
+            log.error('deleteObject failed due to', { error });
             throw error;
         }
     }

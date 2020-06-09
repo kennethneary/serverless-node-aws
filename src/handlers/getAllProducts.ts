@@ -9,7 +9,7 @@ const productService = new ProductService();
 export const handler: APIGatewayProxyHandler = async (
     event: APIGatewayProxyEvent
 ) => {
-    log.info('Calling getAllProducts...', event);
+    log.info('Calling getAllProducts...', { event });
     const allProducts = await productService.getAllProducts();
     return buildResponse(200, allProducts);
 };
