@@ -43,23 +43,33 @@ export default class ProductService {
                 },
             };
             const productPromise = this.dynamoService.getItem(dbRequest);
+            const productMetadata = await productPromise;
+            let product = null;
 
-            const s3Request: GetObjectRequest = {
-                Bucket: ProductService.S3_BUCKET_NAME,
-                Key: id,
-            };
-            const s3Promise = this.s3Service.getObject(s3Request);
+            if (!_.isNull(productMetadata)) {
+                product = { ...(<Product>productMetadata.Item) };
 
-            const product = await productPromise;
-            const s3data = await s3Promise;
+                const s3Request: GetObjectRequest = {
+                    Bucket: ProductService.S3_BUCKET_NAME,
+                    Key: id,
+                };
+                const s3Promise = this.s3Service.getObject(s3Request);
 
-            return {
-                ...(<Product>product.Item),
-                content: {
-                    base64Content: s3data.Body.toString('utf-8'),
-                    contentType: s3data.ContentType,
-                },
-            };
+                try {
+                    const s3data = await s3Promise;
+                    product = {
+                        ...product,
+                        content: {
+                            base64Content: s3data.Body.toString('utf-8'),
+                            contentType: s3data.ContentType,
+                        },
+                    };
+                } catch (error) {
+                    if (error.statusCode !== 404) throw error;
+                }
+            }
+
+            return product;
         } catch (error) {
             log.error('getProduct failed due to', { error });
             throw error;
@@ -82,7 +92,6 @@ export default class ProductService {
             };
             const addItem = this.dynamoService.addItem(dbRequest);
 
-            // let uploadObject = Promise.resolve();
             let uploadObject;
             if (ProductService.isValidS3Body(product.content)) {
                 const s3Request: PutObjectRequest = {
@@ -94,6 +103,7 @@ export default class ProductService {
                 uploadObject = this.s3Service.uploadObject(s3Request);
             }
 
+            // sent both S3 & DynamoDb requests concurrently before trying to resolve
             await addItem;
             await uploadObject;
 
@@ -106,17 +116,38 @@ export default class ProductService {
 
     async updateProduct(id: string, product: Product): Promise<void> {
         try {
+            // could use 'put' over and 'update' here and just pass the product object
             const dbRequest: DocumentClient.UpdateItemInput = {
                 TableName: ProductService.PRODUCT_TABLE,
                 Key: {
-                    ..._.omit(product, 'content'),
                     id,
                 },
+                UpdateExpression: `
+                    set #name = :name,
+                    #price = :price,
+                    #description = :description,
+                    #createdDateTime = :createdDateTime,
+                    #lastUpdatedDateTime = :lastUpdatedDateTime
+                `,
                 ConditionExpression: 'attribute_exists(#primaryKey)',
                 ExpressionAttributeNames: {
                     '#primaryKey': ProductService.PRODUCT_TABLE_PRIMARY_KEY,
+                    '#name': 'name',
+                    '#price': 'price',
+                    '#description': 'description',
+                    '#createdDateTime': 'createdDateTime',
+                    '#lastUpdatedDateTime': 'lastUpdatedDateTime',
                 },
+                ExpressionAttributeValues: {
+                    ':name': product.name,
+                    ':price': product.price,
+                    ':description': product.description,
+                    ':createdDateTime': product.createdDateTime,
+                    ':lastUpdatedDateTime': product.lastUpdatedDateTime,
+                },
+                ReturnValues: 'NONE',
             };
+
             const updateItem = this.dynamoService.updateItem(dbRequest);
 
             const isValidS3Object = ProductService.isValidS3Body(
@@ -138,6 +169,7 @@ export default class ProductService {
                 updateObject = this.s3Service.deleteObject(s3Request);
             }
 
+            // sent both S3 & DynamoDb requests concurrently before trying to resolve
             await updateItem;
             await updateObject;
             return Promise.resolve();
@@ -168,6 +200,7 @@ export default class ProductService {
             };
             const deleteObject = this.s3Service.deleteObject(s3Request);
 
+            // sent both S3 & DynamoDb requests concurrently before trying to resolve
             await deleteItem;
             await deleteObject;
             return Promise.resolve();
@@ -177,6 +210,7 @@ export default class ProductService {
         }
     }
 
+    // do not return s3 content. get client to call specific item for performance
     async queryProductsByName(name: string): Promise<Product[]> {
         try {
             const dbRequest: DocumentClient.QueryInput = {
@@ -184,12 +218,13 @@ export default class ProductService {
                 IndexName: ProductService.PRODUCT_INDEX_NAME,
                 KeyConditionExpression: '#name = :name',
                 ExpressionAttributeNames: {
-                    '#name': ProductService.PRODUCT_INDEX_NAME,
+                    '#name': 'name',
                 },
                 ExpressionAttributeValues: {
                     ':name': name,
                 },
             };
+
             const { Items } = await this.dynamoService.query(dbRequest);
             return <Product[]>Items;
         } catch (error) {
@@ -198,6 +233,7 @@ export default class ProductService {
         }
     }
 
+    // do not return s3 content. get client to call specific item for performance
     async getAllProducts(): Promise<Product[]> {
         try {
             const dbRequest: DocumentClient.QueryInput = {

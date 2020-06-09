@@ -1,5 +1,6 @@
-import { APIGatewayProxyHandler, APIGatewayProxyEvent } from 'aws-lambda';
 import * as log from 'lambda-log';
+import * as _ from 'lodash';
+import { APIGatewayProxyHandler, APIGatewayProxyEvent } from 'aws-lambda';
 import { buildResponse } from '../utils/utils';
 import ProductService from '../services/productService';
 
@@ -10,7 +11,10 @@ export const handler: APIGatewayProxyHandler = async (
     event: APIGatewayProxyEvent
 ) => {
     log.info('Calling queryProduct...', { event });
-    const { name } = event.pathParameters;
+    const { name } = event.queryStringParameters;
+    if (_.isEmpty(name)) {
+        return buildResponse(400);
+    }
     const products = await productService.queryProductsByName(name);
     return buildResponse(200, products);
 };

@@ -89,8 +89,8 @@ functions:
         handler: src/handlers/queryProduct.handler
         events:
             - http:
-                  path: /products/{id}
-                  method: post
+                  path: /products/query
+                  method: get
                   cors: true
                   private: true
 

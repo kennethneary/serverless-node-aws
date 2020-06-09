@@ -1,5 +1,5 @@
-import { APIGatewayProxyHandler, APIGatewayProxyEvent } from 'aws-lambda';
 import * as log from 'lambda-log';
+import { APIGatewayProxyHandler, APIGatewayProxyEvent } from 'aws-lambda';
 import { buildResponse } from '../utils/utils';
 import ProductService from '../services/productService';
 
